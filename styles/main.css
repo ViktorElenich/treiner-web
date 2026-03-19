@@ -1832,6 +1832,20 @@ strong { font-weight: 600; color: var(--white); }
   max-width: 280px;
 }
 
+.footer-contact {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.footer-contact a {
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.footer-contact a:hover {
+  color: var(--accent);
+}
+
 .footer-links {
   display: flex;
   flex-direction: column;
