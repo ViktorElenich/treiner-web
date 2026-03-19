@@ -1,0 +1,14 @@
+{
+  "name": "TRAINER - Персональный тренер",
+  "short_name": "TRAINER",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#C8A96E",
+  "background_color": "#f5f0eb",
+  "display": "standalone"
+}

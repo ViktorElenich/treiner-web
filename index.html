@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Персональный тренер | Тайский бокс и функциональный тренинг</title>
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Персональные тренировки, тайский бокс для девушек и функциональный тренинг. 13 лет опыта. Первая консультация бесплатно.">
+  <meta name="keywords" content="персональный тренер, тайский бокс, функциональный тренинг, фитнес, тренировки, похудение, персональные тренировки">
+  <meta name="author" content="Персональный тренер">
+  <link rel="canonical" href="https://example.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Персональный тренер | Тайский бокс и функциональный тренинг">
+  <meta property="og:description" content="Персональные тренировки, тайский бокс для девушек и функциональный тренинг. 13 лет опыта. Первая консультация бесплатно.">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Персональный тренер">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Персональный тренер | Тайский бокс и функциональный тренинг">
+  <meta name="twitter:description" content="Персональные тренировки, тайский бокс для девушек и функциональный тренинг. 13 лет опыта.">
+  <meta name="twitter:image" content="assets/img/og.jpg">
+
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Персональный тренер",
+    "description": "Персональные тренировки, тайский бокс для девушек и функциональный тренинг. 13 лет опыта.",
+    "image": "assets/img/og.jpg",
+    "priceRange": "₽₽",
+    "telephone": "+7-XXX-XXX-XX-XX",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Москва",
+      "addressCountry": "RU"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "55.7558",
+      "longitude": "37.6173"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "sameAs": [
+      "https://t.me/"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Тренировки",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Тайский бокс для девушек",
+            "description": "Ударная техника, работа на мешках и лапах. Кардио, координация, уверенность."
+          },
+          "price": "2200",
+          "priceCurrency": "RUB"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Персональные тренировки",
+            "description": "Один на один с тренером. Полная программа под твоё тело и цели."
+          },
+          "price": "3500",
+          "priceCurrency": "RUB"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Функциональный тренинг",
+            "description": "Тренировка всего тела через естественные движения. Сила, гибкость, координация."
+          },
+          "price": "1600",
+          "priceCurrency": "RUB"
+        }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-spinner"></div>
+      <span class="preloader-text">LOADING</span>
+    </div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">TRAINER</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#about" class="nav-link">О тренере</a>
+        <a href="#services" class="nav-link">Услуги</a>
+        <a href="#online" class="nav-link">Онлайн</a>
+        <a href="#results" class="nav-link">Результаты</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#consultation" class="nav-cta btn--magnetic">Записаться</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Открыть меню">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <a href="#about" class="mobile-menu-link">О тренере</a>
+      <a href="#services" class="mobile-menu-link">Услуги</a>
+      <a href="#online" class="mobile-menu-link">Онлайн</a>
+      <a href="#results" class="mobile-menu-link">Результаты</a>
+      <a href="#faq" class="mobile-menu-link">FAQ</a>
+      <a href="#consultation" class="mobile-menu-link mobile-menu-cta">Записаться на консультацию</a>
+    </div>
+  </div>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-glow hero-glow--1"></div>
+      <div class="hero-glow hero-glow--2"></div>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-left">
+        <div class="hero-label">
+          <span class="hero-label-line"></span>
+          <span>Персональный тренер</span>
+        </div>
+        <h1 class="hero-title split-text">
+          ТВОЁ ТЕЛО —<br>ТВОЯ <em>сила</em>
+        </h1>
+        <p class="hero-subtitle">Персональные тренировки, тайский бокс и функциональный тренинг. Программа под твои цели — результат с первых недель.</p>
+        <div class="hero-buttons">
+          <a href="#consultation" class="btn btn--primary btn--magnetic">
+            <span>Бесплатная консультация</span>
+            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#services" class="btn btn--ghost btn--magnetic">
+            <span>Услуги и цены</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="13">0</span><span class="hero-stat-plus">+</span>
+            <span class="hero-stat-label">лет опыта</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="200">0</span><span class="hero-stat-plus">+</span>
+            <span class="hero-stat-label">клиентов</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number" data-count="3">0</span>
+            <span class="hero-stat-label">направления</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image-wrapper">
+          <div class="hero-image">
+            <img src="assets/img/hero.jpg" alt="Персональный тренер" loading="eager">
+          </div>
+          <div class="hero-badge">
+            <span class="hero-badge-text">Сертифицированный тренер</span>
+          </div>
+          <div class="hero-status">
+            <span class="hero-status-dot"></span>
+            <span>Принимаю новых клиентов</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PAIN POINTS ========== -->
+  <section class="pain" id="pain">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">
+          <span class="section-label-line"></span>
+          <span>Знакомо?</span>
+        </div>
+        <h2 class="section-title split-text">УЗНАЁШЬ <em>себя</em>?</h2>
+        <p class="section-subtitle">Если хотя бы один пункт про тебя — я могу помочь. Это не приговор, а точка старта.</p>
+      </div>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <span class="pain-number">01</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Хожу в зал, но результата нет</h3>
+          <p class="pain-desc">Месяцы тренировок, а тело не меняется. Нет прогресса, нет мотивации продолжать.</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-number">02</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Скучно и непонятно, что делать</h3>
+          <p class="pain-desc">Бесцельно хожу между тренажёрами. Нет плана, нет системы, нет интереса.</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-number">03</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Боюсь начать — стесняюсь</h3>
+          <p class="pain-desc">Кажется, что все смотрят. Не знаю технику, боюсь сделать что-то неправильно.</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-number">04</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Пробовала всё, ничего не помогает</h3>
+          <p class="pain-desc">Диеты, марафоны, приложения — ничего не работает надолго. Нужен живой подход.</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-number">05</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Нет времени на долгие тренировки</h3>
+          <p class="pain-desc">Плотный график, работа, семья. Нужен компактный и эффективный формат.</p>
+        </div>
+        <div class="pain-card">
+          <span class="pain-number">06</span>
+          <div class="pain-accent"></div>
+          <h3 class="pain-title">Хочу что-то живое, не типичную качалку</h3>
+          <p class="pain-desc">Надоели однообразные залы. Хочется драйва, энергии, чего-то нового.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about" id="about">
+    <div class="container about-inner">
+      <div class="about-visual">
+        <div class="about-image-wrapper">
+          <div class="about-image">
+            <img src="assets/img/about.jpg" alt="О тренере" loading="lazy">
+          </div>
+          <div class="about-experience">
+            <span class="about-experience-number">13</span>
+            <span class="about-experience-text">лет<br>в фитнесе</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="section-label">
+          <span class="section-label-line"></span>
+          <span>Обо мне</span>
+        </div>
+        <h2 class="section-title split-text">ТРЕНЕР, КОТОРЫЙ <em>понимает</em></h2>
+        <p class="about-lead">Я не просто показываю упражнения. Я создаю <strong>систему</strong>, которая работает именно для тебя — с учётом тела, целей и образа жизни.</p>
+        <p class="about-text">За 13 лет работы я провёл более 10 000 тренировок. Каждый клиент — это индивидуальная история. Я знаю, как довести до результата и тех, кто никогда не занимался, и тех, кто застрял на плато.</p>
+        <div class="about-credentials">
+          <div class="about-credential">
+            <div class="about-credential-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span>Тайский бокс — для уверенности и формы</span>
+          </div>
+          <div class="about-credential">
+            <div class="about-credential-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <span>Функциональный тренинг — сила и выносливость</span>
+          </div>
+          <div class="about-credential">
+            <div class="about-credential-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            </div>
+            <span>Персональные программы питания</span>
+          </div>
+          <div class="about-credential">
+            <div class="about-credential-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <span>Сертифицированный специалист</span>
+          </div>
+          <div class="about-credential">
+            <div class="about-credential-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <span>Индивидуальный подход к каждому</span>
+          </div>
+        </div>
+        <a href="#lead" class="btn btn--primary btn--magnetic">
+          <span>Познакомиться лично — бесплатно</span>
+          <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SERVICES ========== -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <div>
+          <div class="section-label">
+            <span class="section-label-line"></span>
+            <span>Направления</span>
+          </div>
+          <h2 class="section-title split-text">ВЫБЕРИ СВОЁ <em>направление</em></h2>
+        </div>
+        <p class="services-desc">Три формата тренировок — каждый решает свои задачи. Можно совмещать для максимального результата.</p>
+      </div>
+      <div class="services-grid">
+        <!-- Card 1: Thai Boxing -->
+        <div class="service-card">
+          <div class="service-icon">&#x1F94A;</div>
+          <span class="service-type">Группа · до 6 человек</span>
+          <h3 class="service-name">Тайский бокс для девушек</h3>
+          <p class="service-desc">Ударная техника, работа на мешках и лапах. Кардио, координация, уверенность в себе — всё в одной тренировке.</p>
+          <ul class="service-features">
+            <li><span class="service-arrow">&rarr;</span> Техника ударов руками и ногами</li>
+            <li><span class="service-arrow">&rarr;</span> Работа на снарядах и в парах</li>
+            <li><span class="service-arrow">&rarr;</span> Интенсивное жиросжигание</li>
+            <li><span class="service-arrow">&rarr;</span> Подходит для начинающих</li>
+          </ul>
+          <div class="service-price">
+            <span class="service-price-number">2200</span>
+            <span class="service-price-unit">&#8381; / час</span>
+          </div>
+          <a href="#consultation" class="service-link">Записаться &rarr;</a>
+        </div>
+        <!-- Card 2: Personal (Featured) -->
+        <div class="service-card service-card--featured">
+          <div class="service-badge">Хит</div>
+          <div class="service-icon">&#x1F4AA;</div>
+          <span class="service-type">Хит &middot; Персональные</span>
+          <h3 class="service-name">Персональные тренировки</h3>
+          <p class="service-desc">Один на один с тренером. Полная программа под твоё тело и цели. Максимум внимания, максимум результата.</p>
+          <ul class="service-features">
+            <li><span class="service-arrow">&rarr;</span> Индивидуальная программа</li>
+            <li><span class="service-arrow">&rarr;</span> Контроль техники на 100%</li>
+            <li><span class="service-arrow">&rarr;</span> Коррекция питания</li>
+            <li><span class="service-arrow">&rarr;</span> Поддержка между тренировками</li>
+          </ul>
+          <div class="service-price">
+            <span class="service-price-number">3500</span>
+            <span class="service-price-unit">&#8381; / час</span>
+          </div>
+          <a href="#consultation" class="service-link">Начать &rarr; первая со скидкой 30%</a>
+        </div>
+        <!-- Card 3: Functional -->
+        <div class="service-card">
+          <div class="service-icon">&#x26A1;</div>
+          <span class="service-type">Группа &middot; до 8 человек</span>
+          <h3 class="service-name">Функциональный тренинг</h3>
+          <p class="service-desc">Тренировка всего тела через естественные движения. Сила, гибкость, координация — без тяжёлых штанг.</p>
+          <ul class="service-features">
+            <li><span class="service-arrow">&rarr;</span> Работа с собственным весом</li>
+            <li><span class="service-arrow">&rarr;</span> TRX, гири, медболы</li>
+            <li><span class="service-arrow">&rarr;</span> Развитие выносливости</li>
+            <li><span class="service-arrow">&rarr;</span> Подходит всем уровням</li>
+          </ul>
+          <div class="service-price">
+            <span class="service-price-number">1600</span>
+            <span class="service-price-unit">&#8381; / час</span>
+          </div>
+          <a href="#consultation" class="service-link">Записаться &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ONLINE TARIFFS ========== -->
+  <section class="online" id="online">
+    <div class="container">
+      <div class="online-header">
+        <div>
+          <div class="section-label">
+            <span class="section-label-line"></span>
+            <span>Онлайн-программы</span>
+          </div>
+          <h2 class="section-title split-text">ТРЕНИРУЙСЯ <em>где угодно</em></h2>
+        </div>
+        <div class="online-header-right">
+          <p class="online-desc">Закрытый Telegram-канал с тренировками, питанием и поддержкой. Выбери свой уровень.</p>
+          <div class="online-toggle">
+            <button class="toggle-btn active" data-mode="home">Дома</button>
+            <button class="toggle-btn" data-mode="gym">В зале</button>
+          </div>
+        </div>
+      </div>
+      <div class="online-grid" id="onlineGrid">
+        <!-- СТАРТ -->
+        <div class="online-card card-start"
+          data-home-f1="Тренировки для дома"
+          data-gym-f1="Тренировки в зале"
+          data-home-f2="С минимальным инвентарём"
+          data-gym-f2="Тренажёры, гантели, штанга">
+          <span class="online-tariff-type">Тариф 1</span>
+          <h3 class="online-tariff-name">СТАРТ</h3>
+          <div class="online-price">
+            <span class="online-price-number">2 000</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li class="online-f1">Тренировки для дома</li>
+            <li class="online-f2">С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Советы по питанию</li>
+            <li>Общий чат участников</li>
+            <li class="online-feature--crossed">Тренировки в зале</li>
+            <li class="online-feature--crossed">Личная обратная связь</li>
+          </ul>
+          <a href="https://t.me/" target="_blank" rel="noopener" class="online-cta">Выбрать &rarr;</a>
+        </div>
+        <!-- ПРОГРЕСС (Featured) -->
+        <div class="online-card online-card--featured"
+          data-home-f1="Тренировки для дома"
+          data-gym-f1="Тренировки в зале"
+          data-home-f2="С минимальным инвентарём"
+          data-gym-f2="Тренажёры, гантели, штанга">
+          <div class="online-badge">Хит</div>
+          <span class="online-tariff-type">Тариф 2</span>
+          <h3 class="online-tariff-name">ПРОГРЕСС</h3>
+          <div class="online-price">
+            <span class="online-price-number">3 500</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li class="online-f1">Тренировки для дома</li>
+            <li class="online-f2">С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Советы по питанию</li>
+            <li>Чат + AI-бот 24/7</li>
+            <li>Тренировки в зале</li>
+            <li class="online-feature--crossed">Личная обратная связь</li>
+          </ul>
+          <a href="https://t.me/" target="_blank" rel="noopener" class="online-cta online-cta--featured">Выбрать &rarr;</a>
+        </div>
+        <!-- РЕЗУЛЬТАТ -->
+        <div class="online-card"
+          data-home-f1="Тренировки для дома"
+          data-gym-f1="Тренировки в зале"
+          data-home-f2="С минимальным инвентарём"
+          data-gym-f2="Тренажёры, гантели, штанга">
+          <span class="online-tariff-type">Тариф 3</span>
+          <h3 class="online-tariff-name">РЕЗУЛЬТАТ</h3>
+          <div class="online-price">
+            <span class="online-price-number">6 000</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li class="online-f1">Тренировки для дома</li>
+            <li class="online-f2">С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Советы по питанию + анализы</li>
+            <li>Чат + AI-бот 24/7</li>
+            <li>Тренировки в зале</li>
+            <li>Личный чат с тренером</li>
+            <li>Проверка техники по видео</li>
+          </ul>
+          <div class="slots-badge">
+            <span class="slots-dot"></span>
+            Свободно <strong id="slotsCount">8</strong> из 15 мест
+          </div>
+          <a href="https://t.me/" target="_blank" rel="noopener" class="online-cta">Выбрать &rarr;</a>
+        </div>
+      </div>
+      <p class="online-footnote">Доступ открывается автоматически после оплаты через Telegram-бот &middot; Отменить подписку можно в любой момент</p>
+    </div>
+  </section>
+
+  <!-- ========== PROCESS ========== -->
+  <section class="process" id="process">
+    <div class="container">
+      <div class="process-header">
+        <div class="section-label">
+          <span class="section-label-line"></span>
+          <span>Как это работает</span>
+        </div>
+        <h2 class="section-title split-text">4 ШАГА К <em>результату</em></h2>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <span class="process-number">01</span>
+          <h3 class="process-title">Бесплатная консультация</h3>
+          <p class="process-desc">30 минут разбора твоей ситуации. Узнаю цели, ограничения, опыт. Без продаж в лоб.</p>
+          <span class="process-arrow">&rarr;</span>
+        </div>
+        <div class="process-step">
+          <span class="process-number">02</span>
+          <h3 class="process-title">Индивидуальная программа</h3>
+          <p class="process-desc">Составлю план под твоё тело и цели. Тренировки, питание, режим — всё учтено.</p>
+          <span class="process-arrow">&rarr;</span>
+        </div>
+        <div class="process-step">
+          <span class="process-number">03</span>
+          <h3 class="process-title">Тренировки и поддержка</h3>
+          <p class="process-desc">Работаем по плану. Отвечаю на вопросы между тренировками. Корректирую при необходимости.</p>
+          <span class="process-arrow">&rarr;</span>
+        </div>
+        <div class="process-step">
+          <span class="process-number">04</span>
+          <h3 class="process-title">Результат и прогресс</h3>
+          <p class="process-desc">Контроль динамики каждые 2 недели. Видишь прогресс — растёт мотивация.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LEAD MAGNET ========== -->
+  <section class="lead" id="lead">
+    <div class="container lead-inner">
+      <div class="lead-left">
+        <span class="lead-label">Бесплатно &middot; Без обязательств</span>
+        <h2 class="lead-title split-text">ЗАПИШИСЬ НА<br>РАЗБОР <em>ситуации</em></h2>
+        <p class="lead-desc">30 минут, которые изменят твой подход к тренировкам. Никаких продаж в лоб — только польза.</p>
+        <form class="lead-form" id="leadForm">
+          <input type="text" name="name" placeholder="Твоё имя" required class="form-input">
+          <input type="tel" name="phone" placeholder="Телефон или Telegram" required class="form-input">
+          <button type="submit" class="btn btn--dark">
+            <span>Записаться на разбор</span>
+            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+        <div class="success-msg" id="leadSuccess">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Заявка отправлена! Свяжусь с тобой в течение 2 часов.</span>
+        </div>
+      </div>
+      <div class="lead-right">
+        <h3 class="lead-right-title">Что ты получишь:</h3>
+        <div class="lead-benefits">
+          <div class="lead-benefit">
+            <div class="lead-benefit-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>Анализ цели и реальных сроков</span>
+          </div>
+          <div class="lead-benefit">
+            <div class="lead-benefit-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>Разбор ошибок: питание, режим, подход</span>
+          </div>
+          <div class="lead-benefit">
+            <div class="lead-benefit-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>Конкретные рекомендации сразу</span>
+          </div>
+          <div class="lead-benefit">
+            <div class="lead-benefit-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>Скидка 30% на первую тренировку</span>
+          </div>
+        </div>
+        <div class="lead-social-proof">
+          <span>47 человек записались в этом месяце</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESULTS / REVIEWS ========== -->
+  <section class="results" id="results">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">
+          <span class="section-label-line"></span>
+          <span>Отзывы</span>
+        </div>
+        <h2 class="section-title split-text">РЕЗУЛЬТАТЫ <em>говорят</em></h2>
+        <p class="section-subtitle">Реальные люди, реальные изменения. Каждый начинал с того же, что и ты.</p>
+      </div>
+
+      <!-- Swiper Reviews -->
+      <div class="swiper reviews-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">А</div>
+                <div class="review-info">
+                  <span class="review-name">Анна</span>
+                  <span class="review-meta">Тайский бокс &middot; 4 месяца</span>
+                </div>
+              </div>
+              <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <p class="review-text">Никогда не думала, что буду заниматься тайским боксом. Пришла просто попробовать — и осталась. За 4 месяца минус 8 кг и уверенность в себе, которой не было годами.</p>
+              <span class="review-tag">Похудение</span>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">Д</div>
+                <div class="review-info">
+                  <span class="review-name">Дмитрий</span>
+                  <span class="review-meta">Персональные &middot; 6 месяцев</span>
+                </div>
+              </div>
+              <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <p class="review-text">Занимался сам 2 года — результат был минимальный. С тренером за полгода набрал 7 кг мышц. Совершенно другой уровень. Жалею, что не пришёл раньше.</p>
+              <span class="review-tag">Набор массы</span>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">М</div>
+                <div class="review-info">
+                  <span class="review-name">Мария</span>
+                  <span class="review-meta">Функциональный &middot; 3 месяца</span>
+                </div>
+              </div>
+              <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <p class="review-text">Боялась начать — стеснялась. Тренер создал такую атмосферу, что страх прошёл на первой же тренировке. Теперь это моя любимая часть дня.</p>
+              <span class="review-tag">Уверенность</span>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="results-strip">
+        <div class="results-stat">
+          <span class="results-stat-number" data-count="200">0</span><span class="results-stat-plus">+</span>
+          <span class="results-stat-label">Клиентов прошли программы</span>
+        </div>
+        <div class="results-stat">
+          <span class="results-stat-number" data-count="8">0</span><span class="results-stat-unit"> кг</span>
+          <span class="results-stat-label">Средний результат за 3 месяца</span>
+        </div>
+        <div class="results-stat">
+          <span class="results-stat-number" data-count="92">0</span><span class="results-stat-unit">%</span>
+          <span class="results-stat-label">Клиентов продолжают тренировки</span>
+        </div>
+        <div class="results-stat">
+          <span class="results-stat-number" data-count="13">0</span>
+          <span class="results-stat-label">Лет в профессии</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="faq" id="faq">
+    <div class="container faq-inner">
+      <div class="faq-left">
+        <div class="section-label">
+          <span class="section-label-line"></span>
+          <span>Вопросы</span>
+        </div>
+        <h2 class="section-title split-text">ЧАСТЫЕ <em>вопросы</em></h2>
+        <p class="faq-desc">Не нашёл ответ? Напиши — отвечу лично.</p>
+        <a href="#consultation" class="btn btn--primary btn--magnetic">
+          <span>Задать вопрос</span>
+          <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="faq-right">
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Я совсем не занималась спортом. Подойдёт ли тайский бокс?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Да! Большинство моих клиентов начинали с нуля. Программа адаптируется под любой уровень. Первые тренировки — это базовая техника и лёгкая нагрузка. Ты войдёшь в ритм быстрее, чем думаешь.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Что такое бесплатная консультация? Это продажа?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Нет. Это 30 минут, где мы разберём твою ситуацию: цели, ограничения, опыт. Ты получишь конкретные рекомендации. Без давления и обязательств.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Какая скидка на первую персональную тренировку?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>30% на первую персональную тренировку. Это возможность попробовать формат и понять, подходит ли тебе — без полной оплаты.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Можно ли совмещать направления?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Конечно. Многие клиенты совмещают персональные тренировки с тайским боксом или функциональным тренингом. Это даёт более комплексный результат.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Помогаете с питанием и анализами?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Да. В персональных тренировках помогу составить рацион и подскажу, какие анализы сдать для точной картины. Питание — это 70% результата.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Где проходят тренировки?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Тренировки проходят в оборудованном зале в центре города. Точный адрес и детали расскажу на консультации.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONSULTATION (FINAL CTA) ========== -->
+  <section class="consultation" id="consultation">
+    <div class="container">
+      <div class="consultation-box">
+        <div class="consultation-inner">
+          <div class="consultation-text">
+            <div class="section-label">
+              <span class="section-label-line"></span>
+              <span>Запись</span>
+            </div>
+            <h2 class="section-title split-text">НАЧНИ <em>сегодня</em></h2>
+            <p class="consultation-desc">Запишись на бесплатную консультацию. 30 минут, которые могут изменить всё.</p>
+            <div class="consultation-mini-stats">
+              <div class="consultation-mini-stat">
+                <span class="consultation-mini-number">30 мин</span>
+                <span class="consultation-mini-label">Длительность</span>
+              </div>
+              <div class="consultation-mini-stat">
+                <span class="consultation-mini-number consultation-mini-number--white">0 &#8381;</span>
+                <span class="consultation-mini-label">Стоимость</span>
+              </div>
+              <div class="consultation-mini-stat">
+                <span class="consultation-mini-number">&minus;30%</span>
+                <span class="consultation-mini-label">Скидка на первую</span>
+              </div>
+            </div>
+          </div>
+          <div class="consultation-form-wrapper">
+            <form class="consultation-form" id="consultationForm">
+              <div class="form-row">
+                <input type="text" name="name" placeholder="Имя" required class="form-input">
+                <input type="tel" name="phone" placeholder="Телефон" required class="form-input">
+              </div>
+              <select name="direction" class="form-input form-select" required>
+                <option value="" disabled selected>Интересующее направление</option>
+                <option value="personal">Персональные тренировки (офлайн)</option>
+                <option value="boxing">Тайский бокс для девушек (офлайн)</option>
+                <option value="functional">Функциональный тренинг (офлайн)</option>
+                <option value="online-start">Онлайн СТАРТ — дома, 2000&#8381;/мес</option>
+                <option value="online-progress">Онлайн ПРОГРЕСС — дом+зал, 3500&#8381;/мес</option>
+                <option value="online-result">Онлайн РЕЗУЛЬТАТ — полное ведение, 6000&#8381;/мес</option>
+                <option value="unknown">Не знаю — хочу разобраться на консультации</option>
+              </select>
+              <input type="text" name="goal" placeholder="Главная цель" class="form-input">
+              <button type="submit" class="btn btn--primary btn--magnetic btn--full">
+                <span>Записаться на бесплатную консультацию</span>
+                <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <p class="form-legal">Нажимая кнопку, вы соглашаетесь с <a href="pages/offer.html" target="_blank">договором-офертой</a> и <a href="pages/privacy.html" target="_blank">политикой конфиденциальности</a>.</p>
+            </form>
+            <div class="success-msg" id="consultationSuccess">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Отлично! Заявка принята. Свяжусь с тобой в ближайшее время.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo">TRAINER</a>
+          <p class="footer-tagline">Персональный тренер по тайскому боксу и функциональному тренингу</p>
+        </div>
+        <div class="footer-links">
+          <a href="#about">О тренере</a>
+          <a href="#services">Услуги</a>
+          <a href="#results">Результаты</a>
+          <a href="#faq">FAQ</a>
+          <a href="#consultation">Записаться</a>
+        </div>
+        <div class="footer-social">
+          <a href="https://t.me/" target="_blank" rel="noopener" class="footer-social-link" aria-label="Telegram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 TRAINER. Все права защищены.</p>
+        <div class="footer-legal">
+          <a href="pages/offer.html" target="_blank">Договор-оферта</a>
+          <a href="pages/privacy.html" target="_blank">Политика конфиденциальности</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== FLOATING CTA ========== -->
+  <div class="float-cta" id="floatCta">
+    <a href="https://t.me/" target="_blank" rel="noopener" class="float-btn float-btn--tg">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <span>Telegram</span>
+    </a>
+    <a href="#consultation" class="float-btn float-btn--cta">
+      <span>Бесплатная консультация</span>
+    </a>
+  </div>
+
+  <!-- ========== EXIT INTENT POPUP ========== -->
+  <div class="popup-overlay" id="exitPopup">
+    <div class="popup">
+      <button class="popup-close" id="popupClose" aria-label="Закрыть">&times;</button>
+      <h3 class="popup-title">Подожди!</h3>
+      <p class="popup-desc">Запишись на <strong>бесплатную консультацию</strong> — 30 минут разбора твоей ситуации. Без обязательств.</p>
+      <a href="#consultation" class="btn btn--primary popup-btn" id="popupCta">
+        <span>Записаться бесплатно</span>
+      </a>
+      <span class="popup-note">Осталось 3 места на этой неделе</span>
+    </div>
+  </div>
+
+  <!-- ========== COOKIE CONSENT ========== -->
+  <div class="cookie-banner" id="cookieBanner">
+    <p>Мы используем файлы cookie для улучшения работы сайта. <a href="pages/privacy.html" target="_blank">Подробнее</a></p>
+    <button class="cookie-accept" id="cookieAccept">Принять</button>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <!-- Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <!-- Swiper -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- SplitType -->
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <!-- Main JS -->
+  <script src="scripts/main.js"></script>
+</body>
+</html>
