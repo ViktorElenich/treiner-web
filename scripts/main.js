@@ -8,6 +8,11 @@
     counterDuration: 2,
     cursorLerp: 0.12,
     magneticStrength: 0.3,
+
+    // URL бота на Render (заменить после деплоя)
+    webhookUrl: '',
+    // Секретный ключ для проверки заявок (должен совпадать с WEBHOOK_SECRET бота)
+    webhookSecret: '',
   };
 
   // ===== UTILS =====
@@ -518,9 +523,32 @@
     const leadSuccess = document.getElementById('leadSuccess');
 
     if (leadForm) {
-      leadForm.addEventListener('submit', (e) => {
+      leadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!validateForm(leadForm)) return;
+
+        // Собираем данные формы
+        const formData = {
+          name: leadForm.querySelector('[name="name"]').value.trim(),
+          phone: leadForm.querySelector('[name="phone"]').value.trim(),
+        };
+
+        // Отправляем на сервер бота (если URL настроен)
+        if (CONFIG.webhookUrl) {
+          try {
+            await fetch(CONFIG.webhookUrl + '/api/lead', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Webhook-Secret': CONFIG.webhookSecret,
+              },
+              body: JSON.stringify(formData),
+            });
+          } catch (err) {
+            // Не блокируем показ success-сообщения при ошибке сети
+            console.warn('Не удалось отправить заявку:', err);
+          }
+        }
 
         leadForm.style.display = 'none';
         leadSuccess.classList.add('visible');
@@ -532,9 +560,33 @@
     const consultSuccess = document.getElementById('consultationSuccess');
 
     if (consultForm) {
-      consultForm.addEventListener('submit', (e) => {
+      consultForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!validateForm(consultForm)) return;
+
+        // Собираем данные формы
+        const formData = {
+          name: consultForm.querySelector('[name="name"]').value.trim(),
+          phone: consultForm.querySelector('[name="phone"]').value.trim(),
+          direction: consultForm.querySelector('[name="direction"]').value,
+          goal: consultForm.querySelector('[name="goal"]')?.value.trim() || '',
+        };
+
+        // Отправляем на сервер бота (если URL настроен)
+        if (CONFIG.webhookUrl) {
+          try {
+            await fetch(CONFIG.webhookUrl + '/api/consultation', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Webhook-Secret': CONFIG.webhookSecret,
+              },
+              body: JSON.stringify(formData),
+            });
+          } catch (err) {
+            console.warn('Не удалось отправить заявку:', err);
+          }
+        }
 
         consultForm.style.display = 'none';
         consultSuccess.classList.add('visible');
@@ -888,68 +940,6 @@
     });
   }
 
-  // ===== ONLINE TOGGLE =====
-  function initOnlineToggle() {
-    const toggleBtns = document.querySelectorAll('.toggle-btn');
-    const cards = document.querySelectorAll('.online-card');
-    const startCard = document.querySelector('.card-start');
-
-    if (!toggleBtns.length) return;
-
-    toggleBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const mode = btn.dataset.mode; // 'home' or 'gym'
-
-        // Update active button
-        toggleBtns.forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        // Update feature text via data attributes
-        cards.forEach((card) => {
-          const f1 = card.querySelector('.online-f1');
-          const f2 = card.querySelector('.online-f2');
-          if (f1 && card.dataset[mode + 'F1']) {
-            f1.textContent = card.dataset[mode + 'F1'];
-          }
-          if (f2 && card.dataset[mode + 'F2']) {
-            f2.textContent = card.dataset[mode + 'F2'];
-          }
-        });
-
-        // Hide СТАРТ card when gym mode (no gym-only option in СТАРТ)
-        if (startCard) {
-          if (mode === 'gym') {
-            gsap.to(startCard, {
-              opacity: 0,
-              scale: 0.95,
-              duration: 0.3,
-              ease: 'power2.in',
-              onComplete: () => {
-                startCard.classList.add('hidden');
-                // Re-layout remaining cards
-                const grid = document.getElementById('onlineGrid');
-                if (grid) {
-                  grid.style.gridTemplateColumns = window.innerWidth > 1024
-                    ? 'repeat(2, 1fr)'
-                    : '1fr';
-                }
-              },
-            });
-          } else {
-            startCard.classList.remove('hidden');
-            const grid = document.getElementById('onlineGrid');
-            if (grid) {
-              grid.style.gridTemplateColumns = '';
-            }
-            gsap.fromTo(startCard,
-              { opacity: 0, scale: 0.95 },
-              { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
-            );
-          }
-        }
-      });
-    });
-  }
 
   // ===== BOOTSTRAP =====
   document.addEventListener('DOMContentLoaded', () => {
@@ -972,7 +962,6 @@
     initMagneticButtons();
     initParallax();
     initBackToTop();
-    initOnlineToggle();
     initExitIntent();
     initCookieConsent();
   });
