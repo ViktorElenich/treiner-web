@@ -1831,6 +1831,11 @@ strong { font-weight: 600; color: var(--white); }
 .footer-contact {
   font-size: 13px;
   margin-top: 4px;
+  color: var(--muted);
+}
+
+.footer-contact strong {
+  color: var(--white);
 }
 
 .footer-contact a {
@@ -2380,6 +2385,9 @@ strong { font-weight: 600; color: var(--white); }
   .footer .footer-copy { color: rgba(245, 240, 235, 0.3); }
   .footer .footer-legal a { color: rgba(245, 240, 235, 0.3); }
   .footer .footer-social-link { color: rgba(245, 240, 235, 0.5); border-color: rgba(245, 240, 235, 0.1); }
+  .footer .footer-contact { color: rgba(245, 240, 235, 0.5); }
+  .footer .footer-contact strong { color: #f5f0eb; }
+  .footer .footer-contact a { color: rgba(245, 240, 235, 0.5); }
 
   /* Floating CTA */
   .float-btn--tg { background: #1a1a1a; color: #f5f0eb; }
