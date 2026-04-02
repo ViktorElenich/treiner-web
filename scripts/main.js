@@ -9,10 +9,10 @@
     cursorLerp: 0.12,
     magneticStrength: 0.3,
 
-    // URL бота на Render (заменить после деплоя)
-    webhookUrl: '',
+    // URL бота на Render
+    webhookUrl: 'https://treiner-bot.onrender.com',
     // Секретный ключ для проверки заявок (должен совпадать с WEBHOOK_SECRET бота)
-    webhookSecret: '',
+    webhookSecret: 'treiner-bot-secret-2026',
   };
 
   // ===== UTILS =====
