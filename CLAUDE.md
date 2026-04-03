@@ -230,6 +230,9 @@ treiner-web/
 - **Footer-contact не читался в light theme**: добавлены overrides `.footer .footer-contact` и `.footer .footer-contact strong` с явными цветами
 - **"район уточняется на консультации"** → "метро Горьковская"
 - **OG-теги были относительные**: `assets/img/og.jpg` → абсолютные URL + добавлены og:image:width/height
+- **Бот не отвечал в webhook-режиме (Render)**: `dp.startup.register(lambda: ...)` — лямбда без `**kwargs` вызывала `TypeError`, webhook не устанавливался. Исправлено на `app.on_startup.append()` от aiohttp
+- **`init_db()` не вызывался в webhook-режиме**: таблицы БД не создавались → ошибка `no such table: leads`. Добавлен вызов в `on_startup()`
+- **Генерация картинок не работала**: `gemini-2.0-flash-exp` deprecated, Imagen 4 и Nano Banana требуют платный план Gemini. Переведено на Kie AI API (`nano-banana-2`)
 
 ## Плейсхолдеры для замены
 
@@ -273,13 +276,15 @@ python3 -m http.server 8080
 - [x] Кнопки «Выбрать» в тарифах → deep-link на бота для оплаты
 - [x] Footer: локация «метро Горьковская», исправлены цвета в light theme
 - [x] Интеграция форм сайта с ботом (webhook → заявки тренеру в Telegram)
+- [x] Исправлен webhook-режим бота на Render (`app.on_startup` + `init_db()`)
+- [x] Генерация картинок через Kie AI API (Nano Banana 2) вместо deprecated Gemini моделей
 
 ## Связанный проект: Telegram-бот
 
 **Репозиторий:** `/Users/viktor/treiner-bot`
 **GitHub:** https://github.com/ViktorElenich/treiner-bot
 **Деплой (Render):** https://treiner-bot.onrender.com
-**Стек:** Python 3, aiogram 3, aiohttp, ЮKassa, SQLite, Google Gemini API
+**Стек:** Python 3, aiogram 3, aiohttp, ЮKassa, SQLite, Google Gemini API, Kie AI API
 **Бот:** @viktortreiner_bot
 
 Бот для автоматизации подписок на онлайн-программы:
@@ -287,10 +292,10 @@ python3 -m http.server 8080
 - Этап 2 (готов): оплата через ЮKassa (тестовый режим), автодоступ к группам тарифов
 - Этап 3 (готов): модерация чатов — фильтр мата по словарю, 3 предупреждения → бан
 - Генерация контента (готов): `/content` → статьи о питании и спорте через Gemini API (`gemini-3.1-flash-lite-preview`)
-- Генерация картинок (готов, работает только на Render): `gemini-2.0-flash-exp`, из России блокируется Google
+- Генерация картинок (готов): Kie AI API (`nano-banana-2`), асинхронный API с поллингом, ~$0.04/картинка
 - Дедупликация контента (готов): таблица `content_history`, заголовки одобренных постов передаются в промпт
 - Приём заявок с сайта (готов): `/api/lead` + `/api/consultation` → уведомление тренеру + сохранение в БД
-- Деплой на Render (готов): webhook-режим, Python 3.11, `PYTHON_VERSION=3.11.12`
+- Деплой на Render (готов): webhook-режим, Python 3.11, `PYTHON_VERSION=3.11.12`, `app.on_startup` для инициализации
 
 ### Telegram-группы
 
