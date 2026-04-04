@@ -5,5 +5,5 @@ User-agent: Yandex
 Allow: /
 Crawl-delay: 1
 
-Sitemap: https://viktor-treiner.vercel.app/sitemap.xml
-Host: https://viktor-treiner.vercel.app
+Sitemap: https://viktor-trainer.ru/sitemap.xml
+Host: https://viktor-trainer.ru

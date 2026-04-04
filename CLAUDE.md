@@ -14,7 +14,8 @@
 Премиальный одностраничный сайт персонального фитнес-тренера Виктора Еленича с воронкой продаж. Тёмная тема (чёрный + золотой) с автоматическим переключением на светлую тему через `prefers-color-scheme`. Уровень визуала — Awwwards-quality с GSAP-анимациями.
 
 **GitHub:** https://github.com/ViktorElenich/treiner-web
-**Деплой (Vercel):** https://viktor-treiner.vercel.app/
+**Домен:** https://viktor-trainer.ru/
+**Деплой (Vercel):** https://viktor-treiner.vercel.app/ (старый URL, редиректит на домен)
 
 **Направления тренера (акцент на персональные тренировки, не на боевые искусства):**
 - Тайский бокс для девушек (группа до 6 человек) — 2 200 ₽/час
@@ -169,7 +170,7 @@ treiner-web/
 
 - `<title>` с ключевыми словами
 - `<meta name="description">` и `<meta name="keywords">`
-- `<link rel="canonical">` → `https://viktor-treiner.vercel.app/`
+- `<link rel="canonical">` → `https://viktor-trainer.ru/`
 - **Open Graph**: title, description, image, type, url, locale, site_name
 - **Twitter Card**: summary_large_image
 - **JSON-LD** (3 схемы):
@@ -233,6 +234,7 @@ treiner-web/
 - **Бот не отвечал в webhook-режиме (Render)**: `dp.startup.register(lambda: ...)` — лямбда без `**kwargs` вызывала `TypeError`, webhook не устанавливался. Исправлено на `app.on_startup.append()` от aiohttp
 - **`init_db()` не вызывался в webhook-режиме**: таблицы БД не создавались → ошибка `no such table: leads`. Добавлен вызов в `on_startup()`
 - **Генерация картинок не работала**: `gemini-2.0-flash-exp` deprecated, Imagen 4 и Nano Banana требуют платный план Gemini. Переведено на Kie AI API (`nano-banana-2`)
+- **Нет страницы 404 на бэкенде**: aiohttp отдавал дефолтный текстовый 404. Добавлен middleware `error_404_middleware` + стилизованная HTML-страница (`bot/web/not_found.py`)
 
 ## Плейсхолдеры для замены
 
@@ -266,7 +268,7 @@ python3 -m http.server 8080
 - [x] Формы с валидацией (Lead + Consultation)
 - [x] Юридические документы: оферта (14 разделов) + политика конфиденциальности 152-ФЗ (14 разделов)
 - [x] SEO: JSON-LD (LocalBusiness + Person + FAQPage), Open Graph, Twitter Card, sitemap.xml
-- [x] Деплой на Vercel — https://viktor-treiner.vercel.app/
+- [x] Деплой на Vercel — https://viktor-trainer.ru/ (домен `viktor-trainer.ru` от axelname.ru)
 - [x] Hero-фото тренера (`assets/img/hero.jpg`)
 - [x] About-фото (`assets/img/about.jpg`)
 - [x] OG-изображение (`assets/img/og.jpg`, 1200×630) — превью в соцсетях работает
@@ -278,6 +280,14 @@ python3 -m http.server 8080
 - [x] Интеграция форм сайта с ботом (webhook → заявки тренеру в Telegram)
 - [x] Исправлен webhook-режим бота на Render (`app.on_startup` + `init_db()`)
 - [x] Генерация картинок через Kie AI API (Nano Banana 2) вместо deprecated Gemini моделей
+- [x] Страница 404 на бэкенде бота (aiohttp middleware + HTML-страница с тёмной темой)
+- [x] Этап 4 бота: планировщик подписок (APScheduler, cron 10:00 МСК)
+- [x] Напоминания об истечении подписки за 3 дня и за 1 день
+- [x] Авто-кик из групп при истечении подписки (ban + unban)
+- [x] Админ-команды `/stats`, `/users`, `/extend user_id days`
+- [x] Продление подписки через бота (разрешена оплата если ≤3 дней до истечения)
+- [x] Домен `viktor-trainer.ru` — все URL обновлены (canonical, OG, sitemap, robots.txt)
+- [x] Яндекс.Метрика (108390753) + Google Analytics (G-FY7QZ3D77J) на всех страницах
 
 ## Связанный проект: Telegram-бот
 
@@ -291,10 +301,12 @@ python3 -m http.server 8080
 - Этап 1 (готов): /start, меню тарифов, консультация, информация о тренере, deep-links с сайта
 - Этап 2 (готов): оплата через ЮKassa (тестовый режим), автодоступ к группам тарифов
 - Этап 3 (готов): модерация чатов — фильтр мата по словарю, 3 предупреждения → бан
+- Этап 4 (готов): управление подписками — планировщик (APScheduler, 10:00 МСК), напоминания за 3 дня и 1 день, авто-кик из групп при истечении, админ-команды `/stats` `/users` `/extend`, продление подписки через бота
 - Генерация контента (готов): `/content` → статьи о питании и спорте через Gemini API (`gemini-3.1-flash-lite-preview`)
 - Генерация картинок (готов): Kie AI API (`nano-banana-2`), асинхронный API с поллингом, ~$0.04/картинка
 - Дедупликация контента (готов): таблица `content_history`, заголовки одобренных постов передаются в промпт
 - Приём заявок с сайта (готов): `/api/lead` + `/api/consultation` → уведомление тренеру + сохранение в БД
+- Страница 404 (готов): aiohttp middleware перехватывает 404 → стилизованная HTML-страница (тёмная тема, ссылка на сайт)
 - Деплой на Render (готов): webhook-режим, Python 3.11, `PYTHON_VERSION=3.11.12`, `app.on_startup` для инициализации
 
 ### Telegram-группы
@@ -306,6 +318,18 @@ python3 -m http.server 8080
 | ПРОГРЕСС | `-1003756564153` | Подписчики тарифа ПРОГРЕСС |
 | РЕЗУЛЬТАТ | `-1003846945839` | Подписчики тарифа РЕЗУЛЬТАТ |
 
+### Управление подписками (Этап 4)
+
+- **Планировщик** (`bot/services/scheduler.py`): APScheduler `AsyncIOScheduler`, `timezone="Europe/Moscow"`, 3 cron-задачи:
+  - 10:00 — напоминание за 3 дня (`get_expiring_subscriptions(days=3)`)
+  - 10:05 — срочное напоминание за 1 день (`get_expiring_subscriptions(days=1)`)
+  - 10:10 — кик из групп + деактивация (`get_expired_subscriptions()`)
+- **Кик**: `bot.ban_chat_member()` → `bot.unban_chat_member(only_if_banned=True)` — удаляет без постоянного бана
+- **Админ-команды** (`bot/handlers/admin.py`): `/stats` (статистика), `/users` (список подписчиков), `/extend user_id days` (продление)
+- **Продление**: если подписка истекает через ≤3 дней, кнопка "Оплатить" создаёт новую подписку (не блокирует)
+- **Клавиатура**: `renew_subscription_keyboard(tariff_id)` — кнопка "Продлить подписку" в напоминаниях
+- **Страница 404**: middleware `error_404_middleware` в `bot/main.py`, HTML в `bot/web/not_found.py`
+
 ### Модерация чатов
 
 - Метод: список запрещённых слов с нормализацией (обход маскировки: `х*й`, `п1зд@`, `б.л.я.т.ь`)
@@ -315,12 +339,23 @@ python3 -m http.server 8080
 - Команды: `/warnings` (проверить), `/reset_warnings` (сбросить) — только для админа
 - Файлы: `bot/data/bad_words.py`, `bot/handlers/moderation.py`
 
+## Аналитика
+
+- **Яндекс.Метрика:** счётчик `108390753` (вебвизор включён)
+- **Google Analytics:** `G-FY7QZ3D77J`
+- Скрипты добавлены на все 3 страницы: `index.html`, `pages/offer.html`, `pages/privacy.html`
+- Панели: [metrika.yandex.ru](https://metrika.yandex.ru), [analytics.google.com](https://analytics.google.com)
+
+## Домен
+
+- **Домен:** `viktor-trainer.ru` (регистратор: axelname.ru)
+- **DNS:** A-запись `@` → Vercel, CNAME `www` → `cname.vercel-dns.com`
+- **SSL:** автоматически от Vercel
+- Все canonical, OG, sitemap, robots.txt обновлены на `https://viktor-trainer.ru`
+
 ## Что осталось сделать
 
 - [ ] Переход на боевые ключи ЮKassa (сейчас тестовый режим)
-- [ ] Этап 4 бота: управление подписками, напоминания об истечении, авто-кик из групп
-- [ ] Яндекс.Метрика / Google Analytics
-- [ ] Страница 404
 - [ ] Реальные отзывы с фотографиями клиентов
 - [ ] Уведомление в Роскомнадзор об обработке персональных данных
 - [ ] Сменить webhookSecret на более надёжный (сейчас виден в JS-исходнике сайта)
