@@ -11,13 +11,16 @@
 
     // URL бота на Render
     webhookUrl: 'https://treiner-bot.onrender.com',
-    // Секретный ключ для проверки заявок (должен совпадать с WEBHOOK_SECRET бота)
-    webhookSecret: 'treiner-bot-secret-2026',
   };
 
   // ===== UTILS =====
   function lerp(a, b, t) {
     return a + (b - a) * t;
+  }
+
+  // Санитизация ввода — удаляет HTML-теги и ограничивает длину
+  function sanitize(str, maxLen = 200) {
+    return str.replace(/<[^>]*>/g, '').trim().slice(0, maxLen);
   }
 
   const isTouchDevice = window.matchMedia('(hover: none) or (pointer: coarse)').matches;
@@ -527,10 +530,10 @@
         e.preventDefault();
         if (!validateForm(leadForm)) return;
 
-        // Собираем данные формы
+        // Собираем и санитизируем данные формы
         const formData = {
-          name: leadForm.querySelector('[name="name"]').value.trim(),
-          phone: leadForm.querySelector('[name="phone"]').value.trim(),
+          name: sanitize(leadForm.querySelector('[name="name"]').value, 100),
+          phone: sanitize(leadForm.querySelector('[name="phone"]').value, 30),
         };
 
         // Отправляем на сервер бота (если URL настроен)
@@ -538,10 +541,7 @@
           try {
             await fetch(CONFIG.webhookUrl + '/api/lead', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Webhook-Secret': CONFIG.webhookSecret,
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(formData),
             });
           } catch (err) {
@@ -564,12 +564,12 @@
         e.preventDefault();
         if (!validateForm(consultForm)) return;
 
-        // Собираем данные формы
+        // Собираем и санитизируем данные формы
         const formData = {
-          name: consultForm.querySelector('[name="name"]').value.trim(),
-          phone: consultForm.querySelector('[name="phone"]').value.trim(),
-          direction: consultForm.querySelector('[name="direction"]').value,
-          goal: consultForm.querySelector('[name="goal"]')?.value.trim() || '',
+          name: sanitize(consultForm.querySelector('[name="name"]').value, 100),
+          phone: sanitize(consultForm.querySelector('[name="phone"]').value, 30),
+          direction: sanitize(consultForm.querySelector('[name="direction"]').value, 50),
+          goal: sanitize(consultForm.querySelector('[name="goal"]')?.value || '', 300),
         };
 
         // Отправляем на сервер бота (если URL настроен)
@@ -577,10 +577,7 @@
           try {
             await fetch(CONFIG.webhookUrl + '/api/consultation', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Webhook-Secret': CONFIG.webhookSecret,
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(formData),
             });
           } catch (err) {
