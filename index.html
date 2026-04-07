@@ -171,8 +171,8 @@
       <a href="#" class="nav-logo">TRAINER</a>
       <div class="nav-links" id="navLinks">
         <a href="#about" class="nav-link">О тренере</a>
-        <a href="#services" class="nav-link">Услуги</a>
         <a href="#online" class="nav-link">Онлайн</a>
+        <a href="#services" class="nav-link">Офлайн</a>
         <a href="#results" class="nav-link">Результаты</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="#consultation" class="nav-cta btn--magnetic">Записаться</a>
@@ -189,8 +189,8 @@
   <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-inner">
       <a href="#about" class="mobile-menu-link">О тренере</a>
-      <a href="#services" class="mobile-menu-link">Услуги</a>
       <a href="#online" class="mobile-menu-link">Онлайн</a>
+      <a href="#services" class="mobile-menu-link">Офлайн</a>
       <a href="#results" class="mobile-menu-link">Результаты</a>
       <a href="#faq" class="mobile-menu-link">FAQ</a>
       <a href="#consultation" class="mobile-menu-link mobile-menu-cta">Записаться на консультацию</a>
@@ -217,13 +217,19 @@
           ТВОЁ ТЕЛО —<br>ТВОЯ <em>сила</em>
         </h2>
         <p class="hero-subtitle">Тренировки, тайский бокс для девушек и функциональный тренинг в СПб. Программа под твои цели — результат с первых недель.</p>
+        <!-- Динамическая плашка набора (управляется из JS) -->
+        <div class="enrollment-banner" id="enrollmentBanner">
+          <span class="enrollment-icon" id="enrollmentIcon"></span>
+          <span class="enrollment-text" id="enrollmentText"></span>
+        </div>
+
         <div class="hero-buttons">
-          <a href="#consultation" class="btn btn--primary btn--magnetic">
-            <span>Бесплатная консультация</span>
+          <a href="#online" class="btn btn--primary btn--magnetic" id="heroCta">
+            <span id="heroCtaText">Онлайн-программы</span>
             <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="#services" class="btn btn--ghost btn--magnetic">
-            <span>Услуги и цены</span>
+          <a href="#consultation" class="btn btn--ghost btn--magnetic">
+            <span>Бесплатная консультация</span>
           </a>
         </div>
         <div class="hero-stats">
@@ -372,18 +378,112 @@
     </div>
   </section>
 
-  <!-- ========== SERVICES ========== -->
+  <!-- ========== ONLINE TARIFFS ========== -->
+  <section class="online" id="online">
+    <div class="container">
+      <div class="online-header">
+        <div>
+          <div class="section-label">
+            <span class="section-label-line"></span>
+            <span>Онлайн-программы</span>
+          </div>
+          <h2 class="section-title split-text">ТРЕНИРУЙСЯ <em>где угодно</em></h2>
+        </div>
+        <div class="online-header-right">
+          <p class="online-desc">Закрытый Telegram-канал с тренировками, питанием и поддержкой. Выбери свой уровень.</p>
+        </div>
+      </div>
+
+      <!-- Баннер статуса набора (управляется из JS) -->
+      <div class="enrollment-status" id="enrollmentStatus">
+        <div class="enrollment-status-inner" id="enrollmentStatusInner">
+          <span class="enrollment-status-icon" id="enrollmentStatusIcon"></span>
+          <span class="enrollment-status-message" id="enrollmentStatusMessage"></span>
+        </div>
+      </div>
+
+      <div class="online-grid" id="onlineGrid">
+        <!-- СТАРТ -->
+        <div class="online-card card-start">
+          <span class="online-tariff-type">Тариф 1</span>
+          <h3 class="online-tariff-name">СТАРТ</h3>
+          <div class="online-price">
+            <span class="online-price-number">2 000</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li>Тренировки для дома</li>
+            <li>С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Общий чат участников</li>
+            <li class="online-feature--crossed">Советы по питанию</li>
+            <li class="online-feature--crossed">Тренировки в зале</li>
+            <li class="online-feature--crossed">Личная обратная связь</li>
+          </ul>
+          <a href="https://t.me/viktortreiner_bot?start=tariff_start" target="_blank" rel="noopener" class="online-cta online-cta-btn" data-tariff="start">Выбрать &rarr;</a>
+        </div>
+        <!-- ПРОГРЕСС (Featured) -->
+        <div class="online-card online-card--featured">
+          <div class="online-badge">Хит</div>
+          <span class="online-tariff-type">Тариф 2</span>
+          <h3 class="online-tariff-name">ПРОГРЕСС</h3>
+          <div class="online-price">
+            <span class="online-price-number">3 500</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li>Тренировки для дома и зала</li>
+            <li>С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Советы по питанию</li>
+            <li>Чат + AI-бот 24/7</li>
+            <li class="online-feature--crossed">Личная обратная связь</li>
+          </ul>
+          <a href="https://t.me/viktortreiner_bot?start=tariff_progress" target="_blank" rel="noopener" class="online-cta online-cta--featured online-cta-btn" data-tariff="progress">Выбрать &rarr;</a>
+        </div>
+        <!-- РЕЗУЛЬТАТ -->
+        <div class="online-card">
+          <span class="online-tariff-type">Тариф 3</span>
+          <h3 class="online-tariff-name">РЕЗУЛЬТАТ</h3>
+          <div class="online-price">
+            <span class="online-price-number">6 000</span>
+            <span class="online-price-unit">&#8381; / мес</span>
+          </div>
+          <ul class="online-features">
+            <li>Тренировки для дома и зала</li>
+            <li>С минимальным инвентарём</li>
+            <li>3&ndash;5 раз в неделю</li>
+            <li>Персональный план питания</li>
+            <li>Чат + AI-бот 24/7</li>
+            <li>Личный чат с тренером</li>
+            <li>Проверка техники по видео</li>
+            <li>Корректировка программы</li>
+          </ul>
+          <div class="slots-badge">
+            <span class="slots-dot"></span>
+            Свободно <strong id="slotsCount">8</strong> из 15 мест
+          </div>
+          <a href="https://t.me/viktortreiner_bot?start=tariff_result" target="_blank" rel="noopener" class="online-cta online-cta-btn" data-tariff="result">Выбрать &rarr;</a>
+        </div>
+      </div>
+      <p class="online-footnote">Доступ открывается автоматически после оплаты через Telegram-бот &middot; Отменить подписку можно в любой момент</p>
+
+      <!-- Когда набор закрыт — кнопки ведут в бота для записи в лист ожидания -->
+    </div>
+  </section>
+
+  <!-- ========== SERVICES (OFFLINE) ========== -->
   <section class="services" id="services">
     <div class="container">
       <div class="services-header">
         <div>
           <div class="section-label">
             <span class="section-label-line"></span>
-            <span>Направления</span>
+            <span>Офлайн-тренировки</span>
           </div>
-          <h2 class="section-title split-text">ВЫБЕРИ СВОЁ <em>направление</em></h2>
+          <h2 class="section-title split-text">ТРЕНИРОВКИ <em>в зале</em></h2>
         </div>
-        <p class="services-desc">Три формата тренировок — каждый решает свои задачи. Можно совмещать для максимального результата.</p>
+        <p class="services-desc">Три формата тренировок в Санкт-Петербурге — каждый решает свои задачи. Можно совмещать для максимального результата.</p>
       </div>
       <div class="services-grid">
         <!-- Card 1: Thai Boxing -->
@@ -442,89 +542,6 @@
           <a href="#consultation" class="service-link">Записаться &rarr;</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ========== ONLINE TARIFFS ========== -->
-  <section class="online" id="online">
-    <div class="container">
-      <div class="online-header">
-        <div>
-          <div class="section-label">
-            <span class="section-label-line"></span>
-            <span>Онлайн-программы</span>
-          </div>
-          <h2 class="section-title split-text">ТРЕНИРУЙСЯ <em>где угодно</em></h2>
-        </div>
-        <div class="online-header-right">
-          <p class="online-desc">Закрытый Telegram-канал с тренировками, питанием и поддержкой. Выбери свой уровень.</p>
-        </div>
-      </div>
-      <div class="online-grid" id="onlineGrid">
-        <!-- СТАРТ -->
-        <div class="online-card card-start">
-          <span class="online-tariff-type">Тариф 1</span>
-          <h3 class="online-tariff-name">СТАРТ</h3>
-          <div class="online-price">
-            <span class="online-price-number">2 000</span>
-            <span class="online-price-unit">&#8381; / мес</span>
-          </div>
-          <ul class="online-features">
-            <li>Тренировки для дома</li>
-            <li>С минимальным инвентарём</li>
-            <li>3&ndash;5 раз в неделю</li>
-            <li>Общий чат участников</li>
-            <li class="online-feature--crossed">Советы по питанию</li>
-            <li class="online-feature--crossed">Тренировки в зале</li>
-            <li class="online-feature--crossed">Личная обратная связь</li>
-          </ul>
-          <a href="https://t.me/viktortreiner_bot?start=tariff_start" target="_blank" rel="noopener" class="online-cta">Выбрать &rarr;</a>
-        </div>
-        <!-- ПРОГРЕСС (Featured) -->
-        <div class="online-card online-card--featured">
-          <div class="online-badge">Хит</div>
-          <span class="online-tariff-type">Тариф 2</span>
-          <h3 class="online-tariff-name">ПРОГРЕСС</h3>
-          <div class="online-price">
-            <span class="online-price-number">3 500</span>
-            <span class="online-price-unit">&#8381; / мес</span>
-          </div>
-          <ul class="online-features">
-            <li>Тренировки для дома и зала</li>
-            <li>С минимальным инвентарём</li>
-            <li>3&ndash;5 раз в неделю</li>
-            <li>Советы по питанию</li>
-            <li>Чат + AI-бот 24/7</li>
-            <li class="online-feature--crossed">Личная обратная связь</li>
-          </ul>
-          <a href="https://t.me/viktortreiner_bot?start=tariff_progress" target="_blank" rel="noopener" class="online-cta online-cta--featured">Выбрать &rarr;</a>
-        </div>
-        <!-- РЕЗУЛЬТАТ -->
-        <div class="online-card">
-          <span class="online-tariff-type">Тариф 3</span>
-          <h3 class="online-tariff-name">РЕЗУЛЬТАТ</h3>
-          <div class="online-price">
-            <span class="online-price-number">6 000</span>
-            <span class="online-price-unit">&#8381; / мес</span>
-          </div>
-          <ul class="online-features">
-            <li>Тренировки для дома и зала</li>
-            <li>С минимальным инвентарём</li>
-            <li>3&ndash;5 раз в неделю</li>
-            <li>Персональный план питания</li>
-            <li>Чат + AI-бот 24/7</li>
-            <li>Личный чат с тренером</li>
-            <li>Проверка техники по видео</li>
-            <li>Корректировка программы</li>
-          </ul>
-          <div class="slots-badge">
-            <span class="slots-dot"></span>
-            Свободно <strong id="slotsCount">8</strong> из 15 мест
-          </div>
-          <a href="https://t.me/viktortreiner_bot?start=tariff_result" target="_blank" rel="noopener" class="online-cta">Выбрать &rarr;</a>
-        </div>
-      </div>
-      <p class="online-footnote">Доступ открывается автоматически после оплаты через Telegram-бот &middot; Отменить подписку можно в любой момент</p>
     </div>
   </section>
 

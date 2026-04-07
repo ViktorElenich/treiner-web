@@ -938,6 +938,114 @@
   }
 
 
+  // ===== ENROLLMENT (набор на онлайн-программы) =====
+  function initEnrollment() {
+    const MONTHS_RU = [
+      'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+      'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+    ];
+
+    function getEnrollmentStatus() {
+      const now = new Date();
+      const day = now.getDate();
+      const month = now.getMonth();
+      const year = now.getFullYear();
+
+      // Набор открыт: с 20-го числа текущего месяца по 3-е следующего
+      const isOpen = day >= 20 || day <= 3;
+
+      if (isOpen) {
+        // Считаем дату закрытия (3-е следующего месяца, 23:59)
+        let closeDate;
+        if (day >= 20) {
+          // Сейчас 20-31 — закрытие 3-го следующего месяца
+          closeDate = new Date(year, month + 1, 3, 23, 59, 59);
+        } else {
+          // Сейчас 1-3 — закрытие 3-го текущего месяца
+          closeDate = new Date(year, month, 3, 23, 59, 59);
+        }
+        const daysLeft = Math.max(0, Math.ceil((closeDate - now) / (1000 * 60 * 60 * 24)));
+
+        // Название месяца, на который идёт набор
+        let targetMonth;
+        if (day >= 20) {
+          targetMonth = MONTHS_RU[(month + 1) % 12];
+        } else {
+          targetMonth = MONTHS_RU[month];
+        }
+
+        return { isOpen: true, daysLeft, targetMonth, closeDate };
+      } else {
+        // Набор закрыт — следующий откроется 20-го текущего месяца
+        const openDate = new Date(year, month, 20);
+        const nextMonth = MONTHS_RU[(month + 1) % 12];
+        return { isOpen: false, openDay: 20, openMonth: MONTHS_RU[month], nextMonth };
+      }
+    }
+
+    const status = getEnrollmentStatus();
+
+    // === Hero banner ===
+    const banner = document.getElementById('enrollmentBanner');
+    const bannerIcon = document.getElementById('enrollmentIcon');
+    const bannerText = document.getElementById('enrollmentText');
+
+    if (banner) {
+      if (status.isOpen) {
+        banner.className = 'enrollment-banner enrollment-banner--open';
+        bannerIcon.textContent = '\uD83D\uDD25';
+        bannerText.textContent = status.daysLeft === 0
+          ? 'Набор открыт \u2014 последний день!'
+          : 'Набор открыт \u2014 ещё ' + status.daysLeft + ' ' + pluralDays(status.daysLeft);
+      } else {
+        banner.className = 'enrollment-banner enrollment-banner--closed';
+        bannerIcon.textContent = '\u23F3';
+        bannerText.textContent = 'Набор с 20 ' + status.openMonth;
+      }
+    }
+
+    // === Online section status ===
+    const enrollStatus = document.getElementById('enrollmentStatus');
+    const statusIcon = document.getElementById('enrollmentStatusIcon');
+    const statusMessage = document.getElementById('enrollmentStatusMessage');
+
+    if (enrollStatus) {
+      if (status.isOpen) {
+        enrollStatus.className = 'enrollment-status enrollment-status--open';
+        statusIcon.textContent = '\uD83D\uDD25';
+        statusMessage.textContent = status.daysLeft === 0
+          ? 'Набор открыт \u2014 последний день!'
+          : 'Набор открыт \u2014 ещё ' + status.daysLeft + ' ' + pluralDays(status.daysLeft);
+      } else {
+        enrollStatus.className = 'enrollment-status enrollment-status--closed';
+        statusIcon.textContent = '\uD83D\uDD12';
+        statusMessage.textContent = 'Набор закрыт \u2014 следующий с 20 ' + status.openMonth;
+      }
+    }
+
+    // === Кнопки тарифов: Выбрать / Записаться в лист ожидания ===
+    const ctaButtons = document.querySelectorAll('.online-cta-btn');
+
+    if (!status.isOpen) {
+      // Набор закрыт — кнопки ведут в бота для записи в вейтлист
+      ctaButtons.forEach(function(btn) {
+        btn.textContent = 'Записаться в лист ожидания \u2192';
+        btn.href = 'https://t.me/viktortreiner_bot?start=waitlist';
+        btn.setAttribute('target', '_blank');
+        btn.setAttribute('rel', 'noopener');
+        btn.classList.add('online-cta--waitlist');
+      });
+    }
+
+    function pluralDays(n) {
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (mod10 === 1 && mod100 !== 11) return 'день';
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня';
+      return 'дней';
+    }
+  }
+
   // ===== BOOTSTRAP =====
   document.addEventListener('DOMContentLoaded', () => {
     // Prevent scroll during preload
@@ -949,6 +1057,7 @@
     initMobileMenu();
     initSmoothScroll();
     initAccordion();
+    initEnrollment();
     initForms();
     initScrollReveal();
     initCounters();
