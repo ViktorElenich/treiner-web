@@ -27,13 +27,17 @@
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ===== REGISTER GSAP PLUGINS =====
-  gsap.registerPlugin(ScrollTrigger);
+  // CDN может быть недоступен — сайт должен работать и без анимаций
+  const hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  if (hasGsap) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
 
   // ===== LENIS SMOOTH SCROLL =====
   let lenis;
 
   function initLenis() {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !hasGsap || typeof Lenis === 'undefined') return;
 
     lenis = new Lenis({
       lerp: 0.1,
@@ -55,35 +59,50 @@
     const preloader = document.getElementById('preloader');
     if (!preloader) return;
 
-    window.addEventListener('load', () => {
-      const tl = gsap.timeline();
-      tl.to('.preloader-spinner', {
-        scale: 0,
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power2.in',
-      })
-        .to('.preloader-text', {
+    let hidden = false;
+
+    function hidePreloader() {
+      if (hidden) return;
+      hidden = true;
+
+      if (hasGsap && !prefersReducedMotion) {
+        const tl = gsap.timeline();
+        tl.to('.preloader-spinner', {
+          scale: 0,
           opacity: 0,
-          y: -10,
-          duration: 0.3,
-        }, '-=0.2')
-        .to(preloader, {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            preloader.style.display = 'none';
-            document.body.style.overflow = '';
-            initHeroAnimations();
-          },
-        });
-    });
+          duration: 0.4,
+          ease: 'power2.in',
+        })
+          .to('.preloader-text', {
+            opacity: 0,
+            y: -10,
+            duration: 0.3,
+          }, '-=0.2')
+          .to(preloader, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              preloader.style.display = 'none';
+              document.body.style.overflow = '';
+              initHeroAnimations();
+            },
+          });
+      } else {
+        preloader.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+
+    window.addEventListener('load', hidePreloader);
+    // Не держим пользователя на «LOADING» дольше 2.5 сек,
+    // даже если аналитика или картинки ещё грузятся
+    setTimeout(hidePreloader, 2500);
   }
 
   // ===== HERO ANIMATIONS =====
   function initHeroAnimations() {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !hasGsap) return;
 
     // Split hero title
     const heroTitle = document.querySelector('.hero-title');
@@ -166,7 +185,7 @@
 
   // ===== SCROLL REVEAL =====
   function initScrollReveal() {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !hasGsap) return;
 
     // Section titles with SplitType
     document.querySelectorAll('.section-title.split-text').forEach((title) => {
@@ -413,7 +432,7 @@
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Nav transition
-    gsap.set(nav, { transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' });
+    nav.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
   }
 
   // ===== MOBILE MENU =====
@@ -446,14 +465,16 @@
       document.body.style.overflow = 'hidden';
 
       // Stagger links with GSAP
-      gsap.from(links, {
-        y: 30,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power3.out',
-        delay: 0.1,
-      });
+      if (hasGsap && !prefersReducedMotion) {
+        gsap.from(links, {
+          y: 30,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: 'power3.out',
+          delay: 0.1,
+        });
+      }
     }
 
     function closeMenu() {
@@ -539,11 +560,12 @@
         // Отправляем на сервер бота (если URL настроен)
         if (CONFIG.webhookUrl) {
           try {
-            await fetch(CONFIG.webhookUrl + '/api/lead', {
+            const res = await fetch(CONFIG.webhookUrl + '/api/lead', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(formData),
             });
+            if (!res.ok) console.warn('Сервер ответил ошибкой:', res.status);
           } catch (err) {
             // Не блокируем показ success-сообщения при ошибке сети
             console.warn('Не удалось отправить заявку:', err);
@@ -575,11 +597,12 @@
         // Отправляем на сервер бота (если URL настроен)
         if (CONFIG.webhookUrl) {
           try {
-            await fetch(CONFIG.webhookUrl + '/api/consultation', {
+            const res = await fetch(CONFIG.webhookUrl + '/api/consultation', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(formData),
             });
+            if (!res.ok) console.warn('Сервер ответил ошибкой:', res.status);
           } catch (err) {
             console.warn('Не удалось отправить заявку:', err);
           }
@@ -632,7 +655,15 @@
 
   // ===== NUMBER COUNTERS =====
   function initCounters() {
-    if (prefersReducedMotion) return;
+    const counters = document.querySelectorAll('.hero-stat-number, .results-stat-number');
+
+    // Без анимаций цифры должны быть видны сразу, а не застывать на «0»
+    if (prefersReducedMotion || !hasGsap) {
+      counters.forEach((el) => {
+        el.textContent = el.dataset.count;
+      });
+      return;
+    }
 
     // Hero stats
     document.querySelectorAll('.hero-stat-number').forEach((el) => {
@@ -664,7 +695,7 @@
 
   // ===== SCROLL PROGRESS BAR =====
   function initScrollProgress() {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !hasGsap) return;
 
     const progressBar = document.getElementById('scrollProgress');
     if (!progressBar) return;
@@ -685,6 +716,12 @@
   function initFloatingCTA() {
     const floatCta = document.getElementById('floatCta');
     if (!floatCta) return;
+
+    if (!hasGsap) {
+      // Без ScrollTrigger просто показываем кнопки всегда
+      floatCta.classList.add('visible');
+      return;
+    }
 
     ScrollTrigger.create({
       trigger: '.hero',
@@ -730,7 +767,7 @@
 
   // ===== CUSTOM CURSOR =====
   function initCustomCursor() {
-    if (isTouchDevice || prefersReducedMotion) return;
+    if (isTouchDevice || prefersReducedMotion || !hasGsap) return;
 
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
@@ -788,7 +825,7 @@
 
   // ===== MAGNETIC BUTTONS =====
   function initMagneticButtons() {
-    if (isTouchDevice || prefersReducedMotion) return;
+    if (isTouchDevice || prefersReducedMotion || !hasGsap) return;
 
     document.querySelectorAll('.btn--magnetic').forEach((btn) => {
       const xTo = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3' });
@@ -898,7 +935,7 @@
 
   // ===== PARALLAX =====
   function initParallax() {
-    if (prefersReducedMotion || isTouchDevice) return;
+    if (prefersReducedMotion || isTouchDevice || !hasGsap) return;
 
     // About experience badge
     gsap.to('.about-experience', {
@@ -938,6 +975,209 @@
   }
 
 
+  // ===== HERO 3D PARTICLES (Three.js) =====
+  function initHeroParticles() {
+    if (prefersReducedMotion) return;
+
+    const heroBg = document.querySelector('.hero-bg');
+    const hero = document.querySelector('.hero');
+    if (!heroBg || !hero) return;
+
+    // Проверка поддержки WebGL
+    try {
+      const testCanvas = document.createElement('canvas');
+      if (!(window.WebGLRenderingContext &&
+        (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')))) return;
+    } catch (e) {
+      return;
+    }
+
+    // Three.js грузим лениво после window.load, чтобы не тормозить первый экран
+    function loadThree() {
+      if (typeof THREE !== 'undefined') {
+        setup();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js';
+      script.onload = setup;
+      document.head.appendChild(script);
+    }
+
+    if (document.readyState === 'complete') {
+      loadThree();
+    } else {
+      window.addEventListener('load', loadThree);
+    }
+
+    function setup() {
+      if (typeof THREE === 'undefined') return;
+
+      const lightScheme = window.matchMedia('(prefers-color-scheme: light)');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, hero.clientWidth / hero.clientHeight, 1, 400);
+      camera.position.z = 100;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(hero.clientWidth, hero.clientHeight);
+      renderer.domElement.className = 'hero-canvas';
+      heroBg.appendChild(renderer.domElement);
+
+      // Мягкая круглая текстура — без неё Points рендерятся квадратами
+      function makeSprite() {
+        const c = document.createElement('canvas');
+        c.width = c.height = 64;
+        const ctx = c.getContext('2d');
+        const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        g.addColorStop(0, 'rgba(255,255,255,1)');
+        g.addColorStop(0.35, 'rgba(255,255,255,0.5)');
+        g.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 64, 64);
+        return new THREE.CanvasTexture(c);
+      }
+      const sprite = makeSprite();
+
+      // Два слоя частиц для глубины: дальний (мелкий, тусклый) и ближний
+      const group = new THREE.Group();
+      scene.add(group);
+
+      function makeLayer(count, spread, size, opacity) {
+        const positions = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+          positions[i * 3] = (Math.random() - 0.5) * spread * 2.4;
+          positions[i * 3 + 1] = (Math.random() - 0.5) * spread * 1.4;
+          // Частицы держим подальше от камеры, чтобы не было гигантских точек
+          positions[i * 3 + 2] = -Math.random() * spread;
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+          color: 0xC8A96E,
+          map: sprite,
+          size: size,
+          sizeAttenuation: true,
+          transparent: true,
+          opacity: opacity,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        });
+        const points = new THREE.Points(geometry, material);
+        group.add(points);
+        return material;
+      }
+
+      const isMobile = hero.clientWidth < 768;
+      const far = makeLayer(isMobile ? 300 : 650, 90, 0.8, 0.3);
+      const near = makeLayer(isMobile ? 150 : 320, 70, 1.5, 0.5);
+
+      // В светлой теме additive-блендинг не работает на светлом фоне —
+      // переключаем на обычный и затемняем частицы
+      function applyScheme() {
+        const light = lightScheme.matches;
+        [far, near].forEach((m) => {
+          m.color.setHex(light ? 0xA8894E : 0xC8A96E);
+          m.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+          m.opacity = light ? (m === far ? 0.25 : 0.4) : (m === far ? 0.35 : 0.55);
+          m.needsUpdate = true;
+        });
+      }
+      applyScheme();
+      if (lightScheme.addEventListener) lightScheme.addEventListener('change', applyScheme);
+
+      // Параллакс за мышью (только десктоп)
+      let targetX = 0;
+      let targetY = 0;
+      if (!isTouchDevice) {
+        document.addEventListener('mousemove', (e) => {
+          targetX = (e.clientX / window.innerWidth - 0.5) * 8;
+          targetY = (e.clientY / window.innerHeight - 0.5) * 5;
+        }, { passive: true });
+      }
+
+      let running = false;
+      let rafId = null;
+
+      function animate() {
+        if (!running) return;
+        group.rotation.y += 0.0006;
+        group.rotation.x += 0.0002;
+        camera.position.x = lerp(camera.position.x, targetX, 0.04);
+        camera.position.y = lerp(camera.position.y, -targetY, 0.04);
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+        rafId = requestAnimationFrame(animate);
+      }
+
+      // Рендерим только пока hero в зоне видимости
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !running) {
+            running = true;
+            animate();
+          } else if (!entry.isIntersecting && running) {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+          }
+        });
+      }, { rootMargin: '100px' });
+      observer.observe(hero);
+
+      window.addEventListener('resize', () => {
+        camera.aspect = hero.clientWidth / hero.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(hero.clientWidth, hero.clientHeight);
+      });
+
+      // Плавное появление
+      requestAnimationFrame(() => renderer.domElement.classList.add('visible'));
+    }
+  }
+
+  // ===== 3D TILT CARDS =====
+  function initTiltCards() {
+    if (isTouchDevice || prefersReducedMotion) return;
+
+    const MAX_TILT = 5; // градусов
+
+    document.querySelectorAll('.service-card, .online-card').forEach((card) => {
+      card.classList.add('tilt');
+
+      const glare = document.createElement('div');
+      glare.className = 'tilt-glare';
+      card.appendChild(glare);
+
+      let rafId = null;
+      let px = 0;
+      let py = 0;
+
+      function apply() {
+        rafId = null;
+        card.style.transform =
+          'perspective(900px) rotateX(' + (-py * MAX_TILT * 2).toFixed(2) + 'deg)' +
+          ' rotateY(' + (px * MAX_TILT * 2).toFixed(2) + 'deg) translateY(-4px)';
+        card.style.setProperty('--gx', ((px + 0.5) * 100).toFixed(1) + '%');
+        card.style.setProperty('--gy', ((py + 0.5) * 100).toFixed(1) + '%');
+      }
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        px = Math.max(-0.5, Math.min(0.5, (e.clientX - rect.left) / rect.width - 0.5));
+        py = Math.max(-0.5, Math.min(0.5, (e.clientY - rect.top) / rect.height - 0.5));
+        if (!rafId) rafId = requestAnimationFrame(apply);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        card.style.transform = '';
+      });
+    });
+  }
+
   // ===== ENROLLMENT (набор на онлайн-программы) =====
   function initEnrollment() {
     const MONTHS_RU = [
@@ -955,13 +1195,16 @@
       const isOpen = day >= 20 || day <= 3;
 
       if (isOpen) {
-        // Считаем дату закрытия (3-е следующего месяца, 23:59)
+        // Считаем дату открытия и закрытия цикла (20-е → 3-е следующего месяца, 23:59)
+        let openDate;
         let closeDate;
         if (day >= 20) {
-          // Сейчас 20-31 — закрытие 3-го следующего месяца
+          // Сейчас 20-31 — открытие 20-го текущего, закрытие 3-го следующего месяца
+          openDate = new Date(year, month, 20);
           closeDate = new Date(year, month + 1, 3, 23, 59, 59);
         } else {
-          // Сейчас 1-3 — закрытие 3-го текущего месяца
+          // Сейчас 1-3 — открытие 20-го прошлого, закрытие 3-го текущего месяца
+          openDate = new Date(year, month - 1, 20);
           closeDate = new Date(year, month, 3, 23, 59, 59);
         }
         const daysLeft = Math.max(0, Math.ceil((closeDate - now) / (1000 * 60 * 60 * 24)));
@@ -974,7 +1217,7 @@
           targetMonth = MONTHS_RU[month];
         }
 
-        return { isOpen: true, daysLeft, targetMonth, closeDate };
+        return { isOpen: true, daysLeft, targetMonth, openDate, closeDate };
       } else {
         // Набор закрыт — следующий откроется 20-го текущего месяца
         const openDate = new Date(year, month, 20);
@@ -1044,6 +1287,67 @@
       if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня';
       return 'дней';
     }
+
+    // === Динамические цифры дефицита ===
+    // Детерминированы от даты: одинаковы для всех посетителей в один день,
+    // не меняются при перезагрузке, двигаются только со временем
+    const now = new Date();
+
+    // Псевдослучайный, но стабильный «шум» от конкретного дня
+    function dateHash(y, m, d) {
+      let h = y * 372 + m * 31 + d;
+      h = (h ^ (h >> 3)) * 40503;
+      return Math.abs(h) % 1000;
+    }
+
+    // «Свободно X из 15 мест» — убывает от 12 до 2 по ходу цикла набора
+    const slotsBadge = document.querySelector('.slots-badge');
+    const slotsCount = document.getElementById('slotsCount');
+    if (slotsBadge && slotsCount) {
+      if (status.isOpen) {
+        const total = status.closeDate - status.openDate;
+        const progress = Math.min(1, Math.max(0, (now - status.openDate) / total));
+        slotsCount.textContent = Math.max(2, Math.round(12 - 10 * progress));
+      } else {
+        slotsBadge.innerHTML = '<span class="slots-dot"></span> Группа набрана — запись в лист ожидания';
+      }
+    }
+
+    // «N человек записались в этом месяце» — растёт с ~9 в начале месяца до ~50 к концу
+    const leadProof = document.querySelector('.lead-social-proof span');
+    if (leadProof) {
+      let count = 8;
+      for (let i = 1; i <= now.getDate(); i++) {
+        count += 1 + (dateHash(now.getFullYear(), now.getMonth(), i) % 2);
+      }
+      count = Math.min(count, 60);
+      leadProof.textContent = count + ' ' + pluralPeople(count) + ' в этом месяце';
+    }
+
+    // «Осталось N мест на этой неделе» — недельный цикл: пн 5 → вс 1
+    const popupNote = document.querySelector('.popup-note');
+    if (popupNote) {
+      const dow = (now.getDay() + 6) % 7; // понедельник = 0
+      const seats = [5, 4, 4, 3, 2, 2, 1][dow];
+      popupNote.textContent = 'Осталось ' + seats + ' ' + pluralSeats(seats) + ' на этой неделе';
+    }
+
+    function pluralPeople(n) {
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (mod100 >= 11 && mod100 <= 14) return 'человек записались';
+      if (mod10 === 1) return 'человек записался';
+      if (mod10 >= 2 && mod10 <= 4) return 'человека записались';
+      return 'человек записались';
+    }
+
+    function pluralSeats(n) {
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (mod10 === 1 && mod100 !== 11) return 'место';
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'места';
+      return 'мест';
+    }
   }
 
   // ===== BOOTSTRAP =====
@@ -1067,6 +1371,8 @@
     initCustomCursor();
     initMagneticButtons();
     initParallax();
+    initHeroParticles();
+    initTiltCards();
     initBackToTop();
     initExitIntent();
     initCookieConsent();

@@ -23,7 +23,9 @@ input, select, textarea { font-family: inherit; }
   --green: #2ecc71;
   --red: #e74c3c;
 
-  --font-heading: 'Bebas Neue', sans-serif;
+  /* Oswald — кириллический аналог Bebas Neue (у Bebas нет кириллицы,
+     русские заголовки падали в системный fallback) */
+  --font-heading: 'Oswald', 'Bebas Neue', sans-serif;
   --font-accent: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
 
@@ -47,7 +49,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.1;
   letter-spacing: 2px;
 }
@@ -460,6 +462,20 @@ strong { font-weight: 600; color: var(--white); }
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+/* WebGL-канвас с золотыми частицами (создаётся из JS) */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hero-canvas.visible {
+  opacity: 1;
 }
 
 .hero-grid {
@@ -892,6 +908,29 @@ strong { font-weight: 600; color: var(--white); }
 
 .service-card:hover {
   transform: translateY(-4px);
+}
+
+/* 3D-tilt карточек (класс и блик добавляются из JS на десктопе) */
+.tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt:hover {
+  transition: transform 0.12s ease-out;
+}
+
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(232, 201, 142, 0.14), transparent 55%);
+}
+
+.tilt:hover .tilt-glare {
+  opacity: 1;
 }
 
 .service-card--featured {

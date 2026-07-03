@@ -120,13 +120,37 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Приоритетная загрузка hero-фото (LCP) -->
+  <link rel="preload" as="image" href="assets/img/hero.jpg" fetchpriority="high">
 
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
   <!-- Main CSS -->
   <link rel="stylesheet" href="styles/main.css">
+
+  <!-- Фолбэк: скрыть прелоадер, если JS отключён или скрипты не загрузились -->
+  <noscript>
+    <style>
+      .preloader, .cursor, .cursor-ring, .scroll-progress { display: none !important; }
+      body { overflow: auto !important; }
+    </style>
+  </noscript>
+  <script>
+    // Аварийное скрытие прелоадера, если main.js/GSAP не загрузились с CDN
+    setTimeout(function () {
+      var p = document.getElementById('preloader');
+      if (p && p.style.display !== 'none') {
+        p.style.transition = 'opacity 0.4s ease';
+        p.style.opacity = '0';
+        p.style.pointerEvents = 'none';
+        document.body.style.overflow = '';
+        setTimeout(function () { p.style.display = 'none'; }, 450);
+      }
+    }, 4000);
+  </script>
 
   <!-- Yandex.Metrika -->
   <script type="text/javascript">
@@ -250,7 +274,7 @@
       <div class="hero-right">
         <div class="hero-image-wrapper">
           <div class="hero-image">
-            <img src="assets/img/hero.jpg" alt="Виктор Еленич — персональный тренер в Санкт-Петербурге" loading="eager">
+            <img src="assets/img/hero.jpg" alt="Виктор Еленич — персональный тренер в Санкт-Петербурге" width="896" height="1089" loading="eager" fetchpriority="high">
           </div>
           <div class="hero-badge">
             <span class="hero-badge-text">Сертифицированный тренер</span>
@@ -322,7 +346,7 @@
       <div class="about-visual">
         <div class="about-image-wrapper">
           <div class="about-image">
-            <img src="assets/img/about.jpg" alt="Виктор Еленич — тренер по тайскому боксу и функциональному тренингу, 13 лет опыта" loading="lazy">
+            <img src="assets/img/about.jpg" alt="Виктор Еленич — тренер по тайскому боксу и функциональному тренингу, 13 лет опыта" width="896" height="1195" loading="lazy">
           </div>
           <div class="about-experience">
             <span class="about-experience-number">13</span>
